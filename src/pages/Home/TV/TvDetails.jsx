@@ -15,11 +15,12 @@ import { saveToContinueWatching } from "../../../utils/continueWatching";
 import { FaRedo, FaStar, FaArrowLeft, FaTv, FaStepBackward, FaStepForward, FaInfoCircle, FaBookmark } from "react-icons/fa";
 import { BiCalendar, BiGlobe, BiTv, BiChevronLeft, BiChevronRight, BiSearch } from "react-icons/bi";
 import DetailPageSkeleton from "../reused/DetailPageSkeleton";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer from "../VideoPlayer";
 import SEO from "../SEO";
 import ContentCard from "../ContentCard";
 import CastRow from "../reused/CastRow";
 import { useWatchlist } from "../../../context/WatchlistContext";
+import AdsterraBanner from "../../../components/AdsterraBanner";
 
 const MemoizedVideoPlayer = memo(VideoPlayer);
 
@@ -598,10 +599,12 @@ const TvDetails = ({ tvId: tvIdProp }) => {
           <div className="relative z-10 bg-[#0f1117]/80 backdrop-blur-xl border border-white/5 rounded-2xl md:rounded-[2rem] p-2 md:p-4 shadow-2xl ring-1 ring-white/5">
             {playingSeason !== null && playingEpisode !== null ? (
               <MemoizedVideoPlayer
-                tvId={tvId}
+                id={tvId}
+                mediaType="tv"
                 season={playingSeason}
                 episode={playingEpisode}
                 title={tv.name}
+                poster={`${BACKDROP}${tv.backdrop_path || tv.poster_path}`}
                 key={`${tvId}-${playingSeason}-${playingEpisode}`}
               />
             ) : (
@@ -662,6 +665,8 @@ const TvDetails = ({ tvId: tvIdProp }) => {
           </p>
         </div>
       </div>
+
+      <AdsterraBanner />
      
           
       {/* ── EPISODES SELECTOR ── */}

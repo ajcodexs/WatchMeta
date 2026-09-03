@@ -7,11 +7,12 @@ import { saveToContinueWatching } from "../../../utils/continueWatching";
 import { FaRedo, FaStar, FaArrowLeft, FaInfoCircle, FaBookmark } from "react-icons/fa";
 import { BiCalendar, BiTime, BiGlobe } from "react-icons/bi";
 import DetailPageSkeleton from "../reused/DetailPageSkeleton";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer from "../VideoPlayer";
 import SEO from "../SEO";
 import ContentCard from "../ContentCard";
 import CastRow from "../reused/CastRow";
 import { useWatchlist } from "../../../context/WatchlistContext";
+import AdsterraBanner from "../../../components/AdsterraBanner";
 
 const MemoizedVideoPlayer = memo(VideoPlayer);
 
@@ -351,10 +352,17 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
           <div className="absolute -inset-1 bg-gradient-to-r from-red-600/30 to-blue-600/30 blur-2xl opacity-50 z-0 rounded-2xl md:rounded-[2rem]"></div>
           
           <div className="relative z-10 bg-[#0f1117]/80 backdrop-blur-xl border border-white/5 rounded-2xl md:rounded-[2rem] p-2 md:p-4 shadow-2xl mb-6 ring-1 ring-white/5">
-            <MemoizedVideoPlayer key={movieId} movieId={movieId} title={movie.title} />
+            <MemoizedVideoPlayer
+              key={movieId}
+              id={movieId}
+              mediaType="movie"
+              title={movie.title}
+              poster={`${BACKDROP}${movie.backdrop_path || movie.poster_path}`}
+            />
           </div>
         </div>
 
+        <AdsterraBanner />
 
         {/* Info Banner */}
         <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
