@@ -125,7 +125,7 @@ function ParentComponent() {
           <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           <div className="max-w-5xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-gray-600">
             <div className="flex items-center gap-3">
-              <span className="text-white font-black text-sm">We<span className="text-red-500">Flix</span></span>
+              <span className="text-white font-black text-sm">WatchMeta</span>
               <span>·</span>
               <span>Developed by <span className="text-gray-400 font-semibold">Phyo Min Thein</span></span>
             </div>
@@ -139,6 +139,10 @@ function ParentComponent() {
                     TMDB
                   </a>
                 </span>
+                <span>·</span>
+                <button type="button" onClick={() => navigate('/credits')} className="text-gray-500 hover:text-white underline underline-offset-2 transition-colors">
+                  Credits
+                </button>
               </div>
               <a href="//www.dmca.com/Protection/Status.aspx?ID=204cd8cc-b62c-4f4a-aa8b-939824095655" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120m.png?ID=204cd8cc-b62c-4f4a-aa8b-939824095655"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
             </div>

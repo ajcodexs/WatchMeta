@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 
 const SITE_NAME = 'WatchMeta';
-const SITE_URL  = import.meta.env.VITE_SITE_URL || 'https://www.weflix.app';
-const DEFAULT_IMAGE = `${SITE_URL}/weflix2.png`;
+const SITE_URL  = import.meta.env.VITE_SITE_URL || 'https://watchmeta.site';
+const DEFAULT_IMAGE = `${SITE_URL}/watchmeta.png`;
 
 /**
  * Reusable SEO component.

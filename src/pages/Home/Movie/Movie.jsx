@@ -76,7 +76,7 @@ function Movie() {
             ? `Browse and stream ${genre.name} movies free on WatchMeta. Discover the best ${genre.name.toLowerCase()} films, from classics to new releases.`
             : 'Browse and stream trending movies free on WatchMeta. Discover the most popular, top-rated, and newest films across all genres.'
         }
-        url={`https://www.weflix.app${buildBrowsePath('movie', genreId)}`}
+        url={`https://watchmeta.site${buildBrowsePath('movie', genreId)}`}
       />
       {/* Sticky context header */}
       <div className="sticky top-0 z-40 backdrop-blur-md bg-[#0b0f18]/80 border-b border-white/[0.06]">
@@ -93,7 +93,7 @@ function Movie() {
               {genre ? (
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="text-gray-400 text-[13px] font-medium leading-none">Browsing</span>
-                  <span className="px-2 py-0.5 rounded shadow-sm bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold tracking-wider uppercase leading-none">
+                  <span className="trending-badge px-2 py-0.5 rounded shadow-sm bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold tracking-wider uppercase leading-none">
                     {genre.name}
                   </span>
                 </div>

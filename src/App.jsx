@@ -10,6 +10,7 @@ import MovieDetails from './pages/Home/Movie/MovieDetails';
 import TvDetails from './pages/Home/TV/TvDetails';
 import WatchlistPage from './pages/Home/WatchlistPage';
 import PersonPage from './pages/Home/Person/PersonPage';
+import CreditsPage from './pages/Home/CreditsPage';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/person/:id/:slug" element={<PersonPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
+          <Route path="/credits" element={<CreditsPage />} />
           {/* Legacy detail URLs (auto-canonicalized in page components) */}
           <Route path="/movie/:slug" element={<MovieDetails />} />
           <Route path="/tv/:slug" element={<TvDetails />} />

@@ -3,6 +3,12 @@
 @import 'tailwindcss/utilities';
 
 :root {
+  --watchmeta-background: #050508;
+  --watchmeta-blue: #00B7FF;
+  --watchmeta-purple: #8B5CF6;
+  --watchmeta-magenta: #C084FC;
+  --watchmeta-cyan: #22D3EE;
+  --watchmeta-secondary: #A1A1AA;
   --motion-fast: 160ms;
   --motion-base: 220ms;
   --motion-slow: 300ms;
@@ -26,7 +32,8 @@
 
 
 html, body {
-  background-color: black;
+  background-color: var(--watchmeta-background);
+  color: #FFFFFF;
 }
 
 #root {
@@ -120,4 +127,31 @@ html, body {
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
+}
+
+/* Regrade existing color utilities without changing their layout behavior. */
+[class*="bg-red-"] { background-color: var(--watchmeta-blue) !important; }
+[class*="text-red-"] { color: var(--watchmeta-magenta) !important; }
+[class*="border-red-"] { border-color: var(--watchmeta-blue) !important; }
+[class*="from-red-"] { --tw-gradient-from: var(--watchmeta-blue) !important; }
+[class*="to-red-"] { --tw-gradient-to: var(--watchmeta-purple) !important; }
+[class*="shadow-red-"] { --tw-shadow-color: rgb(0 183 255 / 0.35) !important; }
+[class*="bg-blue-"] { background-color: rgb(34 211 238 / 0.12) !important; }
+[class*="text-blue-"] { color: var(--watchmeta-cyan) !important; }
+[class*="border-blue-"] { border-color: rgb(34 211 238 / 0.35) !important; }
+[class*="bg-purple-"] { background-color: rgb(139 92 246 / 0.18) !important; }
+[class*="text-purple-"] { color: var(--watchmeta-magenta) !important; }
+[class*="bg-orange-"] { background-color: rgb(192 132 252 / 0.16) !important; }
+[class*="text-orange-"] { color: var(--watchmeta-magenta) !important; }
+[class*="bg-yellow-"] { background-color: rgb(34 211 238 / 0.14) !important; }
+[class*="text-yellow-"] { color: var(--watchmeta-cyan) !important; }
+[class*="text-green-"] { color: var(--watchmeta-cyan) !important; }
+
+.trending-badge,
+.trending-badge [class*="bg-red-"],
+.trending-badge [class*="text-red-"],
+.trending-badge [class*="border-red-"] {
+  background-color: rgb(239 68 68 / 0.1) !important;
+  color: #EF4444 !important;
+  border-color: rgb(239 68 68 / 0.2) !important;
 }

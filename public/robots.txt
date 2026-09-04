@@ -9,4 +9,4 @@ Disallow: /api/
 User-agent: Googlebot
 Allow: /
 
-Sitemap: https://www.weflix.app/sitemap.xml
+Sitemap: https://watchmeta.site/sitemap.xml

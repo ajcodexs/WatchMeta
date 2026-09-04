@@ -75,7 +75,7 @@ function Series() {
             ? `Stream ${genre.name} TV shows free on WatchMeta. Watch the best ${genre.name.toLowerCase()} series, from binge-worthy dramas to must-watch hits.`
             : 'Stream trending TV shows and series free on WatchMeta. Discover the most popular, top-rated, and newest shows across all genres.'
         }
-        url={`https://www.weflix.app${buildBrowsePath('tv', genreId)}`}
+        url={`https://watchmeta.site${buildBrowsePath('tv', genreId)}`}
       />
       {/* Sticky context header */}
       <div className="sticky top-0 z-40 backdrop-blur-md bg-[#0b0f18]/80 border-b border-white/[0.06]">
@@ -92,7 +92,7 @@ function Series() {
               {genre ? (
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="text-gray-400 text-[13px] font-medium leading-none">Browsing</span>
-                  <span className="px-2 py-0.5 rounded shadow-sm bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold tracking-wider uppercase leading-none">
+                  <span className="trending-badge px-2 py-0.5 rounded shadow-sm bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold tracking-wider uppercase leading-none">
                     {genre.name}
                   </span>
                 </div>

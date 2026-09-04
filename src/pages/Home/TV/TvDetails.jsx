@@ -876,7 +876,7 @@ const TvDetails = ({ tvId: tvIdProp }) => {
       <footer className="bg-[#040507] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs md:text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <span className="text-white font-black text-base">We<span className="text-red-500">Flix</span></span>
+            <span className="text-white font-black text-base">WatchMeta</span>
             <span className="mx-2 opacity-50">|</span>
           </div>
           <div className="flex items-center gap-2">
