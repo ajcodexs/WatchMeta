@@ -77,28 +77,32 @@ export default function CastRow({ cast }) {
                 }}
               >
                 <div className="w-full aspect-[2/3] bg-[#111827] rounded-xl overflow-hidden ring-1 ring-white/5 group-hover:ring-white/20 group-hover:shadow-xl transition-all duration-300 relative mb-3">
-                  {person.profile_path ? (
-                    <img 
-                      src={`https://image.tmdb.org/t/p/w276_and_h350_face${person.profile_path}`} 
-                      alt={person.name}
-                      className="w-full h-full object-cover"
-                      draggable={false}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#0d1117] text-gray-700">
-                      <FaUser className="text-4xl opacity-50" />
-                    </div>
-                  )}
-                  {/* Overlay shadow for nice gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                </div>
-                {/* Person details */}
-                <h4 className="text-white text-[13px] font-bold leading-tight line-clamp-1 group-hover:text-red-400 transition-colors">
-                  {person.name}
-                </h4>
-                <p className="text-gray-500 text-[11px] mt-1 leading-snug line-clamp-2">
-                  {person.character}
-                </p>
+  {person.profile_path ? (
+    <img
+      src={`https://image.tmdb.org/t/p/w276_and_h350_face${person.profile_path}`}
+      alt={person.name}
+      className="w-full h-full object-cover"
+      draggable={false}
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-[#0d1117] text-gray-700">
+      <FaUser className="text-4xl opacity-50" />
+    </div>
+  )}
+
+  {/* permanent gradient to guarantee contrast */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none transition-opacity duration-300" />
+
+  {/* put text inside overlay and above everything */}
+  <div className="absolute left-3 right-3 bottom-3 z-20">
+    <h4 className="text-white text-[14px] font-bold leading-tight line-clamp-1 drop-shadow-md group-hover:text-red-300 transition-colors">
+      {person.name}
+    </h4>
+    <p className="text-gray-300 text-[11px] mt-1 leading-snug line-clamp-2">
+      {person.character}
+    </p>
+  </div>
+</div>
               </div>
             );
           })}

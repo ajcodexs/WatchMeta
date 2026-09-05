@@ -9,14 +9,13 @@ function ParentComponent() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const activePage =
     location.pathname === '/'                  ? 'home'
     : location.pathname.startsWith('/movies')  ? 'movies'
     : location.pathname.startsWith('/series')  ? 'series'
     : location.pathname.startsWith('/search')  ? 'search'
-    : location.pathname.startsWith('/watchlist') ? 'watchlist'
+    : location.pathname.startsWith('/library') || location.pathname.startsWith('/watchlist') || location.pathname.startsWith('/continue-watching') ? 'library'
     : location.pathname.startsWith('/movie/')  ? 'movies'
     : location.pathname.startsWith('/tv/')     ? 'series'
     : 'home';
@@ -28,49 +27,6 @@ function ParentComponent() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
-
-  // Hide bottom nav when the virtual keyboard is open (mobile)
-  useEffect(() => {
-    let timeoutId;
-    const handleFocus = (e) => {
-      const tag = e.target.tagName?.toLowerCase();
-      if (tag === 'input' || tag === 'textarea') {
-        setKeyboardOpen(true);
-      }
-    };
-    const handleBlur = (e) => {
-      const tag = e.target.tagName?.toLowerCase();
-      if (tag === 'input' || tag === 'textarea') {
-        // Delay closing slightly to prevent flicker if jumping between inputs
-        timeoutId = setTimeout(() => {
-          // Double check if focus moved to another input
-          const activeTag = document.activeElement?.tagName?.toLowerCase();
-          if (activeTag !== 'input' && activeTag !== 'textarea') {
-            setKeyboardOpen(false);
-          }
-        }, 150);
-      }
-    };
-
-    // Use capture phase for focus/blur as they are much more reliable than focusin/focusout bubbling on iOS PWAs
-    document.addEventListener('focus', handleFocus, true);
-    document.addEventListener('blur', handleBlur, true);
-
-    const vv = window.visualViewport;
-    const handleResize = () => {
-      if (vv && vv.height < window.innerHeight * 0.85) {
-        setKeyboardOpen(true);
-      }
-    };
-    if (vv) vv.addEventListener('resize', handleResize);
-
-    return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener('focus', handleFocus, true);
-      document.removeEventListener('blur', handleBlur, true);
-      if (vv) vv.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   const selectedGenreId = (() => {
     const pathParts = location.pathname.split('/').filter(Boolean);
@@ -127,7 +83,7 @@ function ParentComponent() {
             <div className="flex items-center gap-3">
               <span className="text-white font-black text-sm">WatchMeta</span>
               <span>·</span>
-              <span>Developed by <span className="text-gray-400 font-semibold">Phyo Min Thein</span></span>
+              <span>Modified <span className="text-gray-400 font-semibold">AJCODER</span></span>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
@@ -144,20 +100,20 @@ function ParentComponent() {
                   Credits
                 </button>
               </div>
-              <a href="//www.dmca.com/Protection/Status.aspx?ID=204cd8cc-b62c-4f4a-aa8b-939824095655" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120m.png?ID=204cd8cc-b62c-4f4a-aa8b-939824095655"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
+              <a href="//www.dmca.com/Protection/Status.aspx?ID=204cd8cc-b62c-4f4a-aa8b-939824095655" title="DMCA.com Protection Status" className="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120m.png?ID=204cd8cc-b62c-4f4a-aa8b-939824095655"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
             </div>
           </div>
         </footer>}
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#070b14] border-t border-white/[0.08] shadow-[0_-10px_30px_rgba(0,0,0,0.55)] items-center justify-around px-2 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.45rem)] ${keyboardOpen ? 'hidden' : 'flex'}`}>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-[#070b14] border-t border-white/[0.08] shadow-[0_-10px_30px_rgba(0,0,0,0.55)] px-2 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.45rem)]">
         {[
           { id: 'home',   icon: BiHomeAlt,   label: 'Home'    },
           { id: 'movies', icon: BiMoviePlay, label: 'Movies'  },
           { id: 'series', icon: BiTv,        label: 'TV'      },
           { id: 'search', icon: BiSearch,    label: 'Search'  },
-          { id: 'watchlist', icon: BiBookmark, label: 'Watchlist' },
+          { id: 'library', icon: BiBookmark, label: 'Library' },
         ].map(({ id, icon: Icon, label }) => {
           const isActive = activePage === id;
           return (

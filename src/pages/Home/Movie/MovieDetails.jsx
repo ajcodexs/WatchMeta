@@ -13,6 +13,8 @@ import ContentCard from "../ContentCard";
 import CastRow from "../reused/CastRow";
 import { useWatchlist } from "../../../context/WatchlistContext";
 import AdsterraBanner from "../../../components/AdsterraBanner";
+import AdsterraSmartlink from '../../../components/AdsterraSmartlink';
+import AdsterraNative from '../../../components/AdsterraNative';
 
 const MemoizedVideoPlayer = memo(VideoPlayer);
 
@@ -363,9 +365,9 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
         </div>
 
         <AdsterraBanner />
-
+        <AdsterraSmartlink>Sponsored link</AdsterraSmartlink>
         {/* Info Banner */}
-        <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
+        {/* <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
           <FaInfoCircle className="text-blue-400 text-xl shrink-0 mt-0.5" />
           <p className="text-blue-200/70 text-sm leading-relaxed">
             For the best ad-free streaming experience, we highly recommend using {" "}
@@ -379,13 +381,15 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
             </a>
             . Enjoy uninterrupted playback.
           </p>
-        </div>
+        </div> */}
       </div>
 
       {/* ── CAST & CREW ── */}
       {movie.credits?.cast && movie.credits.cast.length > 0 && (
         <CastRow cast={movie.credits.cast} />
       )}
+
+      <AdsterraBanner desktop="banner468x60" mobile="banner320x50" />
 
       {/* ── RELATED TITLES ── */}
       {related.length > 0 && (
@@ -421,6 +425,9 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
           </div>
         </section>
       )}
+
+      <AdsterraBanner desktop="banner468x60" mobile="banner320x50" />
+      <AdsterraNative />
 
       {/* ── FOOTER ── */}
       <footer className="bg-[#040507] border-t border-white/5">

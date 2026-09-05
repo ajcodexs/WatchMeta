@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 const STORAGE_KEY = 'wf_watchlist';
 
@@ -45,12 +46,21 @@ export function WatchlistProvider({ children }) {
     });
   }, []);
 
+  const clearWatchlist = useCallback(() => {
+    setWatchlistIds(new Set());
+    setWatchlistItems([]);
+  }, []);
+
   return (
-    <WatchlistContext.Provider value={{ watchlistIds, watchlistItems, toggleWatchlist, ready: true }}>
+    <WatchlistContext.Provider value={{ watchlistIds, watchlistItems, toggleWatchlist, clearWatchlist, ready: true }}>
       {children}
     </WatchlistContext.Provider>
   );
 }
+
+WatchlistProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export function useWatchlist() {
   const ctx = useContext(WatchlistContext);

@@ -138,7 +138,7 @@ export default function PersonPage() {
             
             <div className="flex flex-wrap gap-4 text-sm font-semibold text-gray-400 mb-8">
               {person.known_for_department && (
-                <span className="bg-red-600/20 text-red-500 px-3 py-1 rounded-full border border-red-500/30">
+                <span className="inline-flex items-center gap-1.5 bg-red-600 border border-red-700 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
                   {person.known_for_department}
                 </span>
               )}

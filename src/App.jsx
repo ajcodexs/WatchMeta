@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import ParentComponent from './pages/Home/ParentComponent';
@@ -8,7 +8,7 @@ import Series from './pages/Home/TV/Series';
 import SearchPage from './pages/Home/SearchPage';
 import MovieDetails from './pages/Home/Movie/MovieDetails';
 import TvDetails from './pages/Home/TV/TvDetails';
-import WatchlistPage from './pages/Home/WatchlistPage';
+import LibraryPage from './pages/Home/LibraryPage';
 import PersonPage from './pages/Home/Person/PersonPage';
 import CreditsPage from './pages/Home/CreditsPage';
 
@@ -28,7 +28,9 @@ function App() {
           <Route path="/series/watch/:slug" element={<TvDetails />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/person/:id/:slug" element={<PersonPage />} />
-          <Route path="/watchlist" element={<WatchlistPage />} />
+          <Route path="/library" element={<LibraryPage />} />
+          <Route path="/watchlist" element={<Navigate to="/library" replace />} />
+          <Route path="/continue-watching" element={<Navigate to="/library" replace />} />
           <Route path="/credits" element={<CreditsPage />} />
           {/* Legacy detail URLs (auto-canonicalized in page components) */}
           <Route path="/movie/:slug" element={<MovieDetails />} />

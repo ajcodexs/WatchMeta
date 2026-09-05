@@ -648,7 +648,7 @@ const TvDetails = ({ tvId: tvIdProp }) => {
       </div>
 
       {/* Info Banner (match Movies) */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 mb-12">
+      {/* <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 mb-12">
         <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5">
           <FaInfoCircle className="text-blue-400 text-xl shrink-0 mt-0.5" />
           <p className="text-blue-200/70 text-sm leading-relaxed">
@@ -664,7 +664,7 @@ const TvDetails = ({ tvId: tvIdProp }) => {
             . Enjoy uninterrupted playback.
           </p>
         </div>
-      </div>
+      </div> */}
 
       <AdsterraBanner />
      

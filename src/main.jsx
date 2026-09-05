@@ -6,6 +6,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WatchlistProvider } from './context/WatchlistContext'
 import './index.css'
 import App from './App.jsx'
+import { installDevToolsDeterrent } from './utils/devGuard'
+
+installDevToolsDeterrent();
 
 const queryClient = new QueryClient({
   defaultOptions: {

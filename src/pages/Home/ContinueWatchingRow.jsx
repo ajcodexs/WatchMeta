@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { BiChevronLeft, BiChevronRight, BiTime } from 'react-icons/bi';
 import { getContinueWatching, CONTINUE_WATCHING_UPDATED_EVENT } from '../../utils/continueWatching';
 import ContentCard from './ContentCard';
 
 const POSTER = 'https://image.tmdb.org/t/p/w500';
 
-export default function ContinueWatchingRow({ onSelect, accent }) {
+export default function ContinueWatchingRow({ onSelect }) {
   const [items, setItems] = useState(() => getContinueWatching());
   const rowRef = useRef(null);
   const dragStateRef = useRef({ active: false, startX: 0, startScrollLeft: 0, moved: false });
@@ -113,10 +114,9 @@ export default function ContinueWatchingRow({ onSelect, accent }) {
       >
         {items.map((item) => {
           const releaseDate = item.release_date || '';
-          const isTv = item.mediaType === 'tv';
           return (
             <div
-              key={item.id}
+              key={`${item.mediaType}-${item.id}-${item.season || ''}-${item.episode || ''}`}
               className="shrink-0 relative"
               style={{ width: 160 }}
             >
@@ -141,3 +141,7 @@ export default function ContinueWatchingRow({ onSelect, accent }) {
     </section>
   );
 }
+
+ContinueWatchingRow.propTypes = {
+  onSelect: PropTypes.func.isRequired,
+};

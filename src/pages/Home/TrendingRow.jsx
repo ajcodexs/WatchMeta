@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { FiArrowRight } from 'react-icons/fi';
+import PropTypes from 'prop-types';
 import ContentCard from './ContentCard';
 
 const API_KEY = import.meta.env.VITE_TMDB_API;
@@ -12,19 +13,25 @@ const endpointFor = (type, variant) => {
   if (variant === 'popular') return `/${type}/popular`;
   if (variant === 'top_rated') return `/${type}/top_rated`;
   if (variant === 'now_playing') return '/movie/now_playing';
+  if (variant === 'upcoming') return '/movie/upcoming';
   if (variant === 'airing_today') return '/tv/airing_today';
   if (variant === 'on_the_air') return '/tv/on_the_air';
   return `/trending/${type}/week`; /* default: trending */
 };
 
 /* Build a discover URL when we need real multi-language support */
-const buildDiscoverUrl = (type, variant, langs, minRating, minVotes, sinceYear) => {
+const buildDiscoverUrl = (type, variant, langs, minRating, minVotes, sinceYear, watchProvider) => {
   const url = new URL(`${BASE_URL}/discover/${type}`);
   url.searchParams.append('api_key', API_KEY);
   url.searchParams.append('language', 'en-US');
   url.searchParams.append('with_original_language', langs.join('|'));
   url.searchParams.append('sort_by', 'popularity.desc');
   url.searchParams.append('include_adult', 'false');
+  if (watchProvider) {
+    url.searchParams.append('with_watch_providers', watchProvider.id);
+    url.searchParams.append('watch_region', watchProvider.region || 'US');
+    url.searchParams.append('with_watch_monetization_types', 'flatrate|free|ads');
+  }
   if (minRating > 0) url.searchParams.append('vote_average.gte', minRating);
   if (minVotes > 0) url.searchParams.append('vote_count.gte', minVotes);
   if (sinceYear > 0) {
@@ -45,7 +52,7 @@ const buildDiscoverUrl = (type, variant, langs, minRating, minVotes, sinceYear) 
   return url;
 };
 
-function useRow(type, variant = 'trending', minRating = 0, minVotes = 0, originalLanguage = null, sinceYear = 0) {
+function useRow(type, variant = 'trending', minRating = 0, minVotes = 0, originalLanguage = null, sinceYear = 0, watchProvider = null) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,7 +82,7 @@ function useRow(type, variant = 'trending', minRating = 0, minVotes = 0, origina
           results = results.filter(i => langs.includes(i.original_language));
         } else if (langs && langs.length > 1) {
           // Use discover endpoint — it supports with_original_language natively
-          const url = buildDiscoverUrl(type, variant, langs, minRating, minVotes, sinceYear);
+          const url = buildDiscoverUrl(type, variant, langs, minRating, minVotes, sinceYear, watchProvider);
           // Fetch 2 pages for ranked rows so we have enough cards
           const [r1, r2] = await Promise.all([
             fetch(url).then(r => r.json()),
@@ -87,6 +94,11 @@ function useRow(type, variant = 'trending', minRating = 0, minVotes = 0, origina
           url.searchParams.append('api_key', API_KEY);
           url.searchParams.append('language', 'en-US');
           if (langs) url.searchParams.append('with_original_language', langs[0]);
+          if (watchProvider) {
+            url.searchParams.set('with_watch_providers', watchProvider.id);
+            url.searchParams.set('watch_region', watchProvider.region || 'US');
+            url.searchParams.set('with_watch_monetization_types', 'flatrate|free|ads');
+          }
           const res = await fetch(url);
           const data = await res.json();
           results = data.results ?? [];
@@ -114,10 +126,15 @@ function useRow(type, variant = 'trending', minRating = 0, minVotes = 0, origina
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type, variant, minRating, minVotes, sinceYear, langsKey]);
+  }, [type, variant, minRating, minVotes, sinceYear, langsKey, watchProvider?.id, watchProvider?.region]);
 
   return { items, loading };
 }
+
+const watchProviderPropType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  region: PropTypes.string,
+});
 
 export default function TrendingRow({
   title,
@@ -131,8 +148,9 @@ export default function TrendingRow({
   onSelect,
   onSeeAll,
   accent,
+  watchProvider = null,
 }) {
-  const { items, loading } = useRow(type, variant, minRating, minVotes, originalLanguage, sinceYear);
+  const { items, loading } = useRow(type, variant, minRating, minVotes, originalLanguage, sinceYear, watchProvider);
   const rowRef = useRef(null);
   const dragStateRef = useRef({ active: false, startX: 0, startScrollLeft: 0, moved: false });
   const suppressClickRef = useRef(false);
@@ -295,3 +313,21 @@ export default function TrendingRow({
     </section>
   );
 }
+
+TrendingRow.propTypes = {
+  title: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['movie', 'tv']).isRequired,
+  variant: PropTypes.string,
+  showRank: PropTypes.bool,
+  minRating: PropTypes.number,
+  minVotes: PropTypes.number,
+  sinceYear: PropTypes.number,
+  originalLanguage: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
+  onSelect: PropTypes.func.isRequired,
+  onSeeAll: PropTypes.func,
+  accent: PropTypes.string,
+  watchProvider: watchProviderPropType,
+};

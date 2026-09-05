@@ -15,11 +15,11 @@ const NAV_ITEMS = [
   { id: 'home', icon: BiHomeAlt, action: 'navigate', label: 'Home' },
   { id: 'movies', icon: BiMoviePlay, action: 'navigate', label: 'Movies' },
   { id: 'series', icon: BiTv, action: 'navigate', label: 'TV Shows' },
-  { id: 'watchlist', icon: BiBookmark, action: 'navigate', label: 'Watchlist' },
+  { id: 'library', icon: BiBookmark, action: 'navigate', label: 'My Library' },
 ];
 
 function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
-  const ACTIVE_MAP = { search: 'search', movies: 'movies', series: 'series', watchlist: 'watchlist', home: 'home' };
+  const ACTIVE_MAP = { search: 'search', movies: 'movies', series: 'series', library: 'library', home: 'home' };
   const activeId = ACTIVE_MAP[activePage] ?? 'home';
 
   const showCategories = activePage === 'movies' || activePage === 'series';
@@ -63,7 +63,7 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
 
       {/* Nav items */}
       <nav className={`flex flex-col gap-1 px-[10px] ${showCategories ? 'shrink-0 pb-3' : 'flex-1 pb-6'}`}>
-        {NAV_ITEMS.map(({ id, icon: Icon, action, label }) => {
+        {NAV_ITEMS.map(({ id, icon: Icon, label }) => {
           const isActive = activeId === id;
           return (
             <button
