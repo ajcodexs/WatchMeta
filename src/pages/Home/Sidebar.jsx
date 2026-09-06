@@ -50,7 +50,7 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
         </div>
         <div className="flex flex-col leading-tight whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-100">
           <span className="text-white font-black text-[20px] tracking-tight">WatchMeta</span>
-          <span className="text-red-400/70 text-[10px] font-semibold tracking-[0.22em] uppercase mt-0.5">Streaming</span>
+          <span className="text-red-600 text-[10px] font-semibold tracking-[0.22em] uppercase mt-0.5">Streaming</span>
         </div>
       </button>
 
@@ -80,7 +80,7 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
                 }
               `}
             >
-              <Icon className={`text-[24px] shrink-0 transition-colors duration-200 ${isActive ? 'text-red-400' : ''}`} />
+              <Icon className={`text-[24px] shrink-0 transition-colors duration-200 ${isActive ? 'text-white' : ''}`} />
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75">
                 {label}
               </span>

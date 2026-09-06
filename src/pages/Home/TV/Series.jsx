@@ -98,7 +98,7 @@ function Series() {
                 </div>
               ) : (
                 <div className="flex items-center gap-2 mt-1.5">
-                  <span className="px-2 py-0.5 rounded shadow-sm bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold tracking-wider uppercase leading-none">
+                  <span className="px-2 py-0.5 rounded shadow-sm bg-red-500/10 border border-red-500/20 text-white text-[11px] font-bold tracking-wider uppercase leading-none">
                     Trending
                   </span>
                   <span className="text-gray-400 text-[13px] font-medium leading-none">this week</span>

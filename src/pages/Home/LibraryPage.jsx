@@ -145,7 +145,7 @@ const LibraryPage = () => {
               action={sortedContinueItems.length > 0 ? (
                 <button type="button" onClick={() => {
                   if (window.confirm('Remove all Continue Watching items?')) clearContinueWatching();
-                }} className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/20 transition-colors">
+                }} className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-white hover:bg-red-500/20 transition-colors">
                   <FaTrash className="text-[10px]" />
                   Remove all
                 </button>
@@ -180,7 +180,7 @@ const LibraryPage = () => {
               icon={BiBookmark}
               count={sortedWatchlistItems.length}
               action={sortedWatchlistItems.length > 0 ? (
-                <button type="button" onClick={handleClearWatchlist} className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/20 transition-colors">
+                <button type="button" onClick={handleClearWatchlist} className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-white hover:bg-red-500/20 transition-colors">
                   <FaTrash className="text-[10px]" />
                   Remove all
                 </button>

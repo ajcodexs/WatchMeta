@@ -145,7 +145,7 @@ export default function HeroBanner() {
 
         {/* Live badge + type label */}
         <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-1.5 bg-red-600/20 border border-red-500/40 text-red-400 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="inline-flex items-center gap-1.5 bg-red-600/20 border border-red-500/40 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
             <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
             Trending
           </span>

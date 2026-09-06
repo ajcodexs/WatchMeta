@@ -21,6 +21,8 @@ import ContentCard from "../ContentCard";
 import CastRow from "../reused/CastRow";
 import { useWatchlist } from "../../../context/WatchlistContext";
 import AdsterraBanner from "../../../components/AdsterraBanner";
+import AdsterraNative from '../../../components/AdsterraNative';
+
 
 const MemoizedVideoPlayer = memo(VideoPlayer);
 
@@ -659,7 +661,7 @@ const TvDetails = ({ tvId: tvIdProp }) => {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:px-8 border-b border-white/[0.04]">
               <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
                 <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-red-500/20 to-red-500/5 border border-red-500/20 shrink-0">
-                  <BiTv className="text-red-400 text-lg" />
+                  <BiTv className="text-white text-lg" />
                 </div>
                 <div>
                   <h2 className="text-lg md:text-xl font-bold text-white mb-0.5">Episodes</h2>
@@ -671,13 +673,13 @@ const TvDetails = ({ tvId: tvIdProp }) => {
 
               {/* Search */}
               <div className="relative w-full sm:w-64">
-                <BiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+                <BiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white text-sm" />
                 <input
                   type="text"
                   value={episodeQuery}
                   onChange={(e) => setEpisodeQuery(e.target.value)}
                   placeholder="Search episodes…"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 focus:bg-white/[0.05] transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-white focus:outline-none focus:border-red-500/50 focus:bg-white/[0.05] transition-all"
                 />
               </div>
             </div>
@@ -797,7 +799,7 @@ const TvDetails = ({ tvId: tvIdProp }) => {
                             {ep.name || `Episode ${ep.episode_number}`}
                           </p>
                           {ep.runtime && (
-                            <p className="text-[11px] text-gray-500 font-medium mt-1.5">{ep.runtime} min</p>
+                            <p className="text-[11px] text-white font-medium mt-1.5">{ep.runtime} min</p>
                           )}
                         </div>
                       </button>
@@ -853,7 +855,7 @@ const TvDetails = ({ tvId: tvIdProp }) => {
           </div>
         </section>
       )}
-
+      <AdsterraNative />
       {/* ── FOOTER ── */}
       <footer className="bg-[#040507] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs md:text-sm text-gray-500">

@@ -79,7 +79,7 @@ export default function ContinueWatchingRow({ onSelect }) {
       {/* ── Section header ── */}
       <div className="flex items-center justify-between px-4 sm:px-6 mb-5">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-red-600/20 text-red-500 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-red-600/20 text-white flex items-center justify-center">
             <BiTime className="text-xl" />
           </div>
           <h2 className="text-white font-bold text-lg md:text-xl tracking-tight">Continue Watching</h2>
