@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { FaCompress, FaExpand, FaPlay, FaServer } from 'react-icons/fa';
 import { SOURCES } from '../../utils/servers';
 import { writeVideoProgress } from '../../utils/videoProgress';
+import VideoPlayerSmartTV from './VideoPlayerSmartTV';
+import { useSmartTVDetection } from '../../hooks/useSmartTVDetection';
 
 const isFiniteNumber = (value) => typeof value === 'number' && Number.isFinite(value);
 
@@ -17,7 +19,8 @@ const getMessagePayload = (data) => {
     return data;
 };
 
-const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) => {
+// ORIGINAL COMPONENT - Renamed to avoid conflict
+const VideoPlayerDesktop = ({ id, mediaType, season = 1, episode = 1, title, poster }) => {
     const [started, setStarted] = useState(false);
     const [sourceIdx, setSourceIdx] = useState(0);
     const [realFullscreen, setRealFullscreen] = useState(false);
@@ -108,8 +111,6 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
             if (eventType !== 'timeupdate') showControls();
             if (eventType !== 'timeupdate') return;
 
-            // VidLink is confirmed to emit Vidking-style timeupdate events.
-            // VidNest, VidSrc RU, and multiembed.mov formats are unconfirmed and unsupported.
             const currentTime = Number(payload.currentTime ?? payload.current_time);
             const duration = Number(payload.duration);
             if (!isFiniteNumber(currentTime) || !isFiniteNumber(duration) || duration <= 0 || currentTime < 0) return;
@@ -235,6 +236,26 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
             </div>
         </div>
     );
+};
+
+VideoPlayerDesktop.propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    mediaType: PropTypes.oneOf(['movie', 'tv']).isRequired,
+    season: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    episode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    poster: PropTypes.string,
+};
+
+// SMART TV DETECTION WRAPPER
+const VideoPlayer = (props) => {
+    const isSmartTV = useSmartTVDetection();
+    
+    if (isSmartTV) {
+        return <VideoPlayerSmartTV {...props} />;
+    }
+    
+    return <VideoPlayerDesktop {...props} />;
 };
 
 VideoPlayer.propTypes = {
