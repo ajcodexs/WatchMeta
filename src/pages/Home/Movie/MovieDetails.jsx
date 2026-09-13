@@ -364,24 +364,23 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
           </div>
         </div>
 
-        <AdsterraBanner />
-        <AdsterraSmartlink>Sponsored link</AdsterraSmartlink>
+        {/* <AdsterraSmartlink>Sponsored link</AdsterraSmartlink> */}
         {/* Info Banner */}
-        {/* <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
-          <FaInfoCircle className="text-blue-400 text-xl shrink-0 mt-0.5" />
-          <p className="text-blue-200/70 text-sm leading-relaxed">
-            For the best ad-free streaming experience, we highly recommend using {" "}
+        <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
+          <FaInfoCircle className="text-white text-xl shrink-0 mt-0.5" />
+          <p className="text-white text-sm leading-relaxed">
+            For the best streaming experience, we highly recommend choosing other {" "}
             <a
-              href="https://ublockorigin.com"
+              href="https://rubbingcane.com/p79wjpv0t?key=a17be609817bfbbd0887d68e7ddb5351"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 font-semibold underline underline-offset-2 hover:text-blue-300 transition-colors"
+              className="text-white font-semibold underline underline-offset-2 hover:white-blue-300 transition-colors"
             >
-              uBlock Origin
+              Servers
             </a>
-            . Enjoy uninterrupted playback.
+            . Enjoy watching.
           </p>
-        </div> */}
+        </div>
       </div>
 
       {/* ── CAST & CREW ── */}
@@ -389,7 +388,8 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
         <CastRow cast={movie.credits.cast} />
       )}
 
-      <AdsterraBanner desktop="banner468x60" mobile="banner320x50" />
+      <AdsterraBanner />
+      {/* <AdsterraBanner desktop="banner468x60" mobile="banner320x50" /> */}
 
       {/* ── RELATED TITLES ── */}
       {related.length > 0 && (
@@ -426,7 +426,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
         </section>
       )}
 
-      <AdsterraBanner desktop="banner468x60" mobile="banner320x50" />
+      {/* <AdsterraBanner desktop="banner468x60" mobile="banner320x50" /> */}
       <AdsterraNative />
 
       {/* ── FOOTER ── */}

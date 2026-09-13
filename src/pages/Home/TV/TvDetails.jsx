@@ -647,11 +647,24 @@ const TvDetails = ({ tvId: tvIdProp }) => {
           )}
           </div>
         </div>
+        {/* Info Banner */}
+        <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
+          <FaInfoCircle className="text-white text-xl shrink-0 mt-0.5" />
+          <p className="text-white text-sm leading-relaxed">
+            For the best streaming experience, we highly recommend choosing other {" "}
+            <a
+              href="https://rubbingcane.com/xf4synry?key=3cf4dbd751face0ed2e325defec1ab76"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white font-semibold underline underline-offset-2 hover:white-blue-300 transition-colors"
+            >
+              Servers
+            </a>
+            . Enjoy watching.
+          </p>
+        </div>
       </div>
 
-
-      <AdsterraBanner />
-     
           
       {/* ── EPISODES SELECTOR ── */}
       {allSeasons.length > 0 && (
@@ -815,6 +828,8 @@ const TvDetails = ({ tvId: tvIdProp }) => {
           </section>
         </div>
       )}
+
+        <AdsterraBanner />
 
       {/* ── CAST & CREW ── */}
       {tv.credits?.cast && tv.credits.cast.length > 0 && (

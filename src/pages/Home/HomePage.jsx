@@ -99,7 +99,6 @@ export default function HomePage() {
           onSelect={handleSelect}
           onSeeAll={goMovies}
         />
-        <AdsterraBanner />
         <TrendingRow
           title="Now Playing in Theaters"
           type="movie"
@@ -109,7 +108,7 @@ export default function HomePage() {
           onSeeAll={goMovies}
         />
 
-        <section className="mb-12">
+        {/* <section className="mb-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 mb-5">
             <div className="flex items-center gap-3">
               <div className="w-1 h-6 rounded-full bg-[#C084FC]" />
@@ -138,7 +137,7 @@ export default function HomePage() {
             onSelect={handleSelect}
             onSeeAll={goMovies}
           />
-        </section>
+        </section> */}
 
         <TrendingRow
           title="Upcoming Movies"
@@ -162,7 +161,6 @@ export default function HomePage() {
           onSelect={handleSelect}
           onSeeAll={goSeries}
         />
-        <AdsterraBanner />
         <TrendingRow
           title="Trending TV Shows"
           type="tv"
