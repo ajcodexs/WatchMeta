@@ -25,7 +25,7 @@ const AdsterraNative = () => {
   }, [unit]);
 
   return (
-    <div className="w-full my-6 overflow-hidden" aria-label="Advertisement">
+    <div className="w-full px-4 mx-auto my-6 overflow-hidden max-w-7xl sm:px-6 md:px-12" aria-label="Advertisement">
       <div ref={containerRef} className="w-full min-h-[90px]" />
     </div>
   );

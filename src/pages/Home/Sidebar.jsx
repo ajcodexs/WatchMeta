@@ -7,7 +7,6 @@ import {
   BiTv,
   BiBookmark
 } from 'react-icons/bi';
-import { FaPlay } from 'react-icons/fa';
 import { GENRES, SPECIAL_CATEGORIES } from './tmdb';
 
 const NAV_ITEMS = [
@@ -37,26 +36,26 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
       border-r border-white/10
       shadow-2xl shadow-black/30
       overflow-hidden
-      transition-[width] duration-300 ease-in-out
+      transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
       select-none
     ">
 
-      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-red-500/10 to-transparent pointer-events-none" />
+      {/* <div className="absolute inset-x-0 top-0 h-24 pointer-events-none bg-gradient-to-b from-red-500/10 to-transparent" /> */}
 
       {/* Logo */}
-      <button onClick={() => onNavigate('home')} className="relative flex items-center gap-4 px-[18px] pt-8 pb-8 shrink-0 text-left hover:opacity-90 transition-opacity">
-        <div className="flex items-center justify-center w-[48px] h-[48px] rounded-2xl bg-gradient-to-br from-red-500 to-red-700 shadow-lg shadow-red-900/40 ring-1 ring-white/10 shrink-0">
-          <FaPlay className="text-white text-[15px] ml-0.5" />
-        </div>
-        <div className="flex flex-col leading-tight whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-100">
-          <span className="text-white font-black text-[20px] tracking-tight">WatchMeta</span>
-          <span className="text-red-600 text-[10px] font-semibold tracking-[0.22em] uppercase mt-0.5">Streaming</span>
+      <button onClick={() => onNavigate('home')} className="relative flex items-center gap-0 h-[92px] px-[30px] py-0 shrink-0 text-left hover:opacity-90 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] origin-left">
+        <div className="flex flex-col leading-tight">
+          <span className="text-white font-black text-[20px] tracking-tight whitespace-nowrap leading-none">
+            <span className="inline-block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">W</span>
+            <span className="inline-block overflow-hidden max-w-0 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-75 group-hover:max-w-[200px] group-hover:opacity-100"><span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">atch</span><span className="text-white">Meta</span></span>
+          </span>
+          <span className="text-red-600 text-[10px] font-semibold tracking-[0.22em] uppercase mt-0.5 transition-all duration-500 ease-out delay-150 -translate-y-1 opacity-0 whitespace-nowrap group-hover:opacity-100 group-hover:translate-y-0">Streaming</span>
         </div>
       </button>
 
       {/* Nav section label */}
       <div className="px-[18px] mb-1 shrink-0">
-        <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75 text-[11px] font-bold tracking-[0.22em] uppercase text-gray-500 whitespace-nowrap">
+        <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 text-[11px] font-bold tracking-[0.22em] uppercase text-white whitespace-nowrap">
           Menu
         </span>
       </div>
@@ -73,15 +72,15 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
               className={`
                 relative flex items-center gap-4 px-4 py-3.5 rounded-2xl
                 w-full text-[14px] font-medium whitespace-nowrap
-                border-2 transition-colors duration-200 focus:outline-none
+                border-2 transition-all duration-300 ease-out focus:outline-none active:scale-[0.98]
                 ${isActive
                   ? 'border-red-500/35 bg-red-500/15 text-white shadow-sm shadow-red-950/30'
-                  : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5 hover:border-transparent'
+                  : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5 hover:border-transparent active:scale-[0.98]'
                 }
               `}
             >
-              <Icon className={`text-[24px] shrink-0 transition-colors duration-200 ${isActive ? 'text-white' : ''}`} />
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75">
+              <Icon className={`text-[24px] shrink-0 transition-all duration-300 ease-out ${isActive ? 'text-white scale-110' : ''}`} />
+              <span className="transition-all duration-300 delay-75 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0">
                 {label}
               </span>
             </button>
@@ -93,10 +92,10 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
       {showCategories && (
         <>
           <div className="mx-[18px] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent shrink-0" />
-          <div className="flex-1 flex flex-col min-h-0 pt-4 pb-4">
+          <div className="flex flex-col flex-1 min-h-0 pt-4 pb-4">
             {/* Section label */}
             <div className="px-[18px] mb-2 shrink-0">
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75 text-[11px] font-bold tracking-[0.22em] uppercase text-gray-500 whitespace-nowrap">
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 text-[11px] font-bold tracking-[0.22em] uppercase text-gray-500 whitespace-nowrap">
                 Genres
               </span>
             </div>
@@ -112,7 +111,7 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
                     className={`
                       relative flex items-center gap-4 px-4 py-2.5 rounded-2xl
                       w-full text-[13px] font-medium whitespace-nowrap
-                      border-2 transition-colors duration-200 focus:outline-none text-left
+                      border-2 transition-all duration-300 ease-out focus:outline-none text-left active:scale-[0.98]
                       ${isActiveGenre
                         ? 'border-red-500/30 bg-red-500/15 text-white'
                         : 'border-transparent text-gray-500 hover:text-gray-200 hover:bg-white/5 hover:border-transparent'
@@ -120,10 +119,10 @@ function Sidebar({ activePage, onNavigate, selectedGenreId, onGenreSelect }) {
                     `}
                   >
                     <span className={`
-                      w-2 h-2 rounded-full shrink-0 transition-all duration-200
-                      ${isActiveGenre ? 'bg-red-400' : 'bg-gray-700'}
+                      w-2 h-2 rounded-full shrink-0 transition-all duration-300 ease-out
+                      ${isActiveGenre ? 'bg-red-400 scale-150' : 'bg-gray-700'}
                     `} />
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75">
+                    <span className="transition-all duration-300 delay-75 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0">
                       {genre.name}
                     </span>
                   </button>

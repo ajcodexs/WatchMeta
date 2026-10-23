@@ -39,6 +39,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
   const relatedListRef = useRef(null);
   const relatedDragStateRef = useRef({ active: false, startX: 0, startScrollLeft: 0, moved: false });
   const suppressRelatedClickRef = useRef(false);
+  const continueWatchingSavedRef = useRef(false);
 
   // Prevent one-frame stale detail flash when navigating between related titles.
   useLayoutEffect(() => {
@@ -49,6 +50,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
     setShowOverview(false);
     setIsDraggingRelated(false);
     suppressRelatedClickRef.current = false;
+    continueWatchingSavedRef.current = false;
   }, [movieId]);
 
   const handleBack = () => {
@@ -84,9 +86,8 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [movieId]);
 
-  // Save to "Continue Watching" tracking
-  useEffect(() => {
-    if (!movie) return;
+  const handlePlaybackStart = useCallback(() => {
+    if (!movie || continueWatchingSavedRef.current) return;
     saveToContinueWatching({
       id: movie.id,
       mediaType: 'movie',
@@ -95,6 +96,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
       vote_average: movie.vote_average,
       release_date: movie.release_date,
     });
+    continueWatchingSavedRef.current = true;
   }, [movie]);
 
   useEffect(() => {
@@ -178,12 +180,12 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
 
   if (error) return (
     <div className="min-h-[60vh] flex items-center justify-center p-6 bg-[#090b10]">
-      <div className="bg-red-900/10 border border-red-700/30 rounded-2xl p-8 max-w-sm w-full text-center backdrop-blur-md">
-        <p className="text-red-400 mb-6 font-medium">{error}</p>
+      <div className="w-full max-w-sm p-8 text-center border bg-red-900/10 border-red-700/30 rounded-2xl backdrop-blur-md">
+        <p className="mb-6 font-medium text-red-400">{error}</p>
         <button
           onClick={load}
           disabled={retrying}
-          className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-lg shadow-red-600/20"
+          className="flex items-center justify-center w-full gap-2 px-6 py-3 font-semibold text-white transition-all bg-red-600 shadow-lg hover:bg-red-500 disabled:opacity-50 rounded-xl shadow-red-600/20"
         >
           <FaRedo className={retrying ? "animate-spin" : ""} />
           {retrying ? "Retrying…" : "Retry"}
@@ -204,7 +206,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
     : overview;
 
   return (
-    <div className="min-h-screen bg-[#07080a] text-gray-200 selection:bg-red-500/30">
+    <div className="min-h-screen bg-zinc-950 text-gray-200 selection:bg-[#ef4444]/30">
       <SEO
         title={`${movie.title}${year ? ` (${year})` : ''} — Watch Free on WatchMeta`}
         description={
@@ -242,39 +244,39 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
       {/* ── HERO SECTION ── */}
       <div className="relative w-full min-h-[70vh] flex flex-col justify-end pt-32 pb-20">
         {/* Backdrop Image */}
-        <div className="absolute inset-0 z-0 select-none overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden select-none">
           {movie.backdrop_path ? (
             <img
               src={`${BACKDROP}${movie.backdrop_path}`}
               alt=""
-              className="w-full h-full object-cover object-top"
+              className="object-cover object-top w-full h-full"
               style={{ filter: "brightness(0.6) contrast(1.1) saturate(1.1)", transform: "scale(1.02)" }}
             />
           ) : (
             <div className="w-full h-full bg-[#111319] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 to-[#111319]" />
           )}
           {/* Gradients for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-[#07080a]/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#07080a]/90 via-[#07080a]/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/90 via-zinc-950/50 to-transparent" />
         </div>
 
         {/* Back Button */}
-        <div className="absolute top-0 left-0 right-0 z-20 p-6 md:p-10 flex">
+        <div className="absolute top-0 left-0 right-0 z-20 flex p-6 md:p-10">
           <button
             onClick={handleBack}
             className="group flex items-center gap-2 bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 text-gray-200 hover:text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300"
           >
-            <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
+            <FaArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
             <span>Back</span>
           </button>
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-end gap-8 lg:gap-14">
+        <div className="relative z-10 flex flex-col items-end w-full gap-8 px-6 mx-auto max-w-7xl md:px-12 md:flex-row lg:gap-14">
           
           {/* Poster (Desktop) */}
           {movie.poster_path && (
-            <div className="hidden md:block shrink-0 z-10">
+            <div className="z-10 hidden md:block shrink-0">
               <img
                 src={`${POSTER}${movie.poster_path}`}
                 alt={movie.title}
@@ -286,7 +288,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
           {/* Info */}
           <div className="flex-1 max-w-3xl pb-2">
             {movie.tagline && (
-              <p className="text-red-400 font-semibold tracking-wider text-xs md:text-sm uppercase mb-3 drop-shadow-md">
+              <p className="mb-3 text-xs font-semibold tracking-wider text-red-400 uppercase md:text-sm drop-shadow-md">
                 {movie.tagline}
               </p>
             )}
@@ -295,16 +297,16 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
               {movie.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-300 mb-6 drop-shadow-md">
-              {year && <span className="flex items-center gap-1.5"><BiCalendar className="text-gray-400 text-base" /> {year}</span>}
-              {runtime && <span className="flex items-center gap-1.5"><BiTime className="text-gray-400 text-base" /> {runtime}</span>}
-              {rating && <span className="flex items-center gap-1.5"><FaStar className="text-yellow-500 text-base" /> {rating}</span>}
+            <div className="flex flex-wrap items-center gap-4 mb-6 text-sm font-medium text-gray-300 drop-shadow-md">
+              {year && <span className="flex items-center gap-1.5"><BiCalendar className="text-base text-gray-400" /> {year}</span>}
+              {runtime && <span className="flex items-center gap-1.5"><BiTime className="text-base text-gray-400" /> {runtime}</span>}
+              {rating && <span className="flex items-center gap-1.5"><FaStar className="text-base text-yellow-500" /> {rating}</span>}
             </div>
 
             {genres.length > 0 && (
                <div className="flex flex-wrap gap-2 mb-6">
                  {genres.map(g => (
-                   <span key={g.id} className="bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-xs font-semibold text-gray-200 shadow-sm">
+                   <span key={g.id} className="px-3 py-1 text-xs font-semibold text-gray-200 transition-colors border rounded-full shadow-sm bg-white/10 hover:bg-white/20 backdrop-blur-md border-white/10">
                      {g.name}
                    </span>
                  ))}
@@ -328,13 +330,13 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
 
             {overview && (
               <div className="relative">
-                <p className="text-gray-300/90 leading-relaxed md:text-lg drop-shadow-md max-w-2xl">
+                <p className="max-w-2xl leading-relaxed text-gray-300/90 md:text-lg drop-shadow-md">
                   {truncated}
                 </p>
                 {overview.length > 280 && (
                   <button
                     onClick={() => setShowOverview(p => !p)}
-                    className="mt-3 text-white font-semibold hover:text-red-400 transition-colors text-sm underline underline-offset-4"
+                    className="mt-3 text-sm font-semibold text-white underline transition-colors hover:text-red-400 underline-offset-4"
                   >
                     {showOverview ? "Show Less" : "Read More"}
                   </button>
@@ -346,39 +348,40 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
       </div>
 
       {/* ── PLAYER & EXTRA CONTENT ── */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 -mt-4 md:-mt-10 mb-20">
+      <div className="relative z-20 px-4 mx-auto mb-20 -mt-4 max-w-7xl sm:px-6 md:px-12 md:-mt-10">
         
         {/* Video Player Container */}
         <div className="relative">
           {/* Subtle Video Player Glow Backdrop */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-red-600/30 to-blue-600/30 blur-2xl opacity-50 z-0 rounded-2xl md:rounded-[2rem]"></div>
+          {/* <div className="absolute -inset-1 bg-gradient-to-r from-red-600/30 to-blue-600/30 blur-2xl opacity-50 z-0 rounded-2xl md:rounded-[2rem]"></div> */}
           
-          <div className="relative z-10 bg-[#0f1117]/80 backdrop-blur-xl border border-white/5 rounded-2xl md:rounded-[2rem] p-2 md:p-4 shadow-2xl mb-6 ring-1 ring-white/5">
+          <div className="relative z-10 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-[2rem] p-2 md:p-4 mb-6">
             <MemoizedVideoPlayer
               key={movieId}
               id={movieId}
               mediaType="movie"
               title={movie.title}
               poster={`${BACKDROP}${movie.backdrop_path || movie.poster_path}`}
+              onPlaybackStart={handlePlaybackStart}
             />
           </div>
         </div>
 
         {/* <AdsterraSmartlink>Sponsored link</AdsterraSmartlink> */}
         {/* Info Banner */}
-        <div className="flex items-start gap-4 bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 md:p-5 mx-2 md:mx-0">
+        <div className="flex items-start gap-4 p-4 mx-2 border bg-blue-900/10 border-blue-500/20 rounded-2xl md:p-5 md:mx-0">
           <FaInfoCircle className="text-white text-xl shrink-0 mt-0.5" />
-          <p className="text-white text-sm leading-relaxed">
-            For the best streaming experience, we highly recommend choosing other {" "}
+          <p className="text-sm leading-relaxed text-white">
+            For an ad-free streaming experience, we highly recommend using{" "}
             <a
-              href="https://rubbingcane.com/p79wjpv0t?key=a17be609817bfbbd0887d68e7ddb5351"
+              href="https://rubbingcane.com/xf4synry?key=3cf4dbd751face0ed2e325defec1ab76"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white font-semibold underline underline-offset-2 hover:white-blue-300 transition-colors"
+              className="font-semibold text-white underline transition-colors underline-offset-2 hover:text-blue-300"
             >
-              Servers
+              Brave Browser
             </a>
-            . Enjoy watching.
+            . Enjoy watching without ads!
           </p>
         </div>
       </div>
@@ -393,9 +396,9 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
 
       {/* ── RELATED TITLES ── */}
       {related.length > 0 && (
-        <section className="px-4 sm:px-6 md:px-12 pb-16">
-          <div className="max-w-7xl mx-auto">
-            <h3 className="text-xl md:text-2xl font-bold text-white mb-6 tracking-tight flex items-center gap-3">
+        <section className="px-4 pb-16 sm:px-6 md:px-12">
+          <div className="mx-auto max-w-7xl">
+            <h3 className="flex items-center gap-3 mb-6 text-xl font-bold tracking-tight text-white md:text-2xl">
               <span className="w-1.5 h-6 bg-red-500 rounded-full inline-block"></span>
               More Like This
             </h3>
@@ -408,7 +411,7 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
               className={`grid grid-flow-col auto-cols-[140px] md:auto-cols-[180px] gap-4 md:gap-5 overflow-x-auto hide-scrollbar px-4 pt-6 pb-6 -mx-4 -mt-6 select-none ${isDraggingRelated ? 'cursor-grabbing' : 'cursor-grab'}`}
             >
               {related.map((item) => (
-                <div key={item.id} className="shrink-0 transition-transform duration-300 hover:-translate-y-2">
+                <div key={item.id} className="transition-transform duration-300 shrink-0 hover:-translate-y-2">
                   <ContentCard
                     title={item.title || item.name}
                     poster={item.poster_path ? `${POSTER}${item.poster_path}` : '/placeholder.svg'}
@@ -431,17 +434,17 @@ const MovieDetails = ({ movieId: movieIdProp }) => {
 
       {/* ── FOOTER ── */}
       <footer className="bg-[#040507] border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs md:text-sm text-gray-500">
+        <div className="flex flex-col items-center justify-between gap-4 px-6 py-8 mx-auto text-xs text-gray-500 max-w-7xl sm:flex-row md:text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-white font-black text-base">WatchMeta</span>
-            <span className="mx-2 opacity-50">|</span>
+            <span className="text-base font-black text-white">WatchMeta</span>
+            {/* <span className="mx-2 opacity-50">|</span> */}
           </div>
           <div className="flex items-center gap-2">
             <span>© {new Date().getFullYear()} WatchMeta</span>
             <span className="mx-2 opacity-50">|</span>
             <span>
               Data by{' '}
-              <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors font-medium">
+              <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="font-medium text-gray-400 transition-colors hover:text-white">
                 TMDB
               </a>
             </span>
@@ -457,5 +460,3 @@ MovieDetails.propTypes = {
 };
 
 export default memo(MovieDetails);
-
-

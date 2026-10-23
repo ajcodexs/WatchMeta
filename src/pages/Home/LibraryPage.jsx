@@ -14,6 +14,7 @@ import {
 import ContentCard from './ContentCard';
 import SEO from './SEO';
 import { toDetailPath } from './urlUtils';
+import AdsterraNative from '../../components/AdsterraNative';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const GRID_CLASSES = 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 sm:gap-4';
@@ -25,10 +26,10 @@ const sortByDateDesc = (field) => (a, b) => {
 };
 
 const SectionEmpty = ({ icon: Icon, title, description, actionLabel, onAction }) => (
-  <div className="border border-dashed border-white/15 rounded-2xl px-6 py-12 text-center">
-    <Icon className="mx-auto text-4xl text-gray-600 mb-3" />
+  <div className="px-6 py-12 text-center border border-dashed border-white/15 rounded-2xl">
+    <Icon className="mx-auto mb-3 text-4xl text-gray-600" />
     <h3 className="text-lg font-bold text-white">{title}</h3>
-    <p className="text-gray-500 text-sm mt-2 mb-5">{description}</p>
+    <p className="mt-2 mb-5 text-sm text-gray-500">{description}</p>
     <button
       type="button"
       onClick={onAction}
@@ -125,10 +126,10 @@ const LibraryPage = () => {
         url="https://watchmeta.site/library"
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         <header className="mb-12">
           <p className="text-[#C084FC] text-xs font-bold uppercase tracking-[0.22em] mb-3">Your collection</p>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight">My Library</h1>
+          <h1 className="text-4xl font-black tracking-tight md:text-5xl">My Library</h1>
           <p className="text-[#A1A1AA] mt-3">Resume what you started and keep your next favorites close.</p>
         </header>
 
@@ -145,7 +146,7 @@ const LibraryPage = () => {
               action={sortedContinueItems.length > 0 ? (
                 <button type="button" onClick={() => {
                   if (window.confirm('Remove all Continue Watching items?')) clearContinueWatching();
-                }} className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-white hover:bg-red-500/20 transition-colors">
+                }} className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold text-white transition-colors border rounded-xl border-red-500/30 bg-red-500/10 hover:bg-red-500/20">
                   <FaTrash className="text-[10px]" />
                   Remove all
                 </button>
@@ -173,14 +174,14 @@ const LibraryPage = () => {
               )}
             </LibrarySection>
 
-            <div className="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent mb-12" />
+            <div className="h-px mb-12 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
             <LibrarySection
               title="Watchlist"
               icon={BiBookmark}
               count={sortedWatchlistItems.length}
               action={sortedWatchlistItems.length > 0 ? (
-                <button type="button" onClick={handleClearWatchlist} className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-semibold text-white hover:bg-red-500/20 transition-colors">
+                <button type="button" onClick={handleClearWatchlist} className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold text-white transition-colors border rounded-xl border-red-500/30 bg-red-500/10 hover:bg-red-500/20">
                   <FaTrash className="text-[10px]" />
                   Remove all
                 </button>
@@ -211,7 +212,7 @@ const LibraryPage = () => {
                           }}
                           aria-label={`Remove ${item.title} from Watchlist`}
                           title="Remove from Watchlist"
-                          className="absolute right-2 top-2 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-black/75 text-gray-200 shadow-lg ring-1 ring-white/20 hover:bg-red-600 hover:text-white transition-colors"
+                          className="absolute z-30 flex items-center justify-center text-gray-200 transition-colors rounded-full shadow-lg right-2 top-2 h-9 w-9 bg-black/75 ring-1 ring-white/20 hover:bg-red-600 hover:text-white"
                         >
                           <FaTrash className="text-xs" />
                         </button>
@@ -229,6 +230,7 @@ const LibraryPage = () => {
                 />
               )}
             </LibrarySection>
+            <AdsterraNative />
           </>
         )}
       </div>
@@ -247,9 +249,9 @@ const ContinueCard = ({ item, onSelect, onRemove }) => {
     <article className="group relative overflow-hidden rounded-xl bg-[#0d1117] ring-1 ring-white/5">
       <button type="button" onClick={() => onSelect(item)} className="block w-full text-left">
         <div className="relative aspect-[2/3] bg-[#111827]">
-          <img src={item.poster_path ? `${IMAGE_BASE_URL}${item.poster_path}` : '/placeholder.svg'} alt={title} className="w-full h-full object-cover" loading="lazy" />
+          <img src={item.poster_path ? `${IMAGE_BASE_URL}${item.poster_path}` : '/placeholder.svg'} alt={title} className="object-cover w-full h-full" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
-          <span className="absolute left-3 bottom-3 text-white text-xs font-bold">Resume</span>
+          <span className="absolute text-xs font-bold text-white left-3 bottom-3">Resume</span>
           {item.mediaType === 'tv' && <span className="absolute top-3 left-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-bold text-[#C084FC]">S{item.season} E{item.episode}</span>}
         </div>
         {progress !== null && <div className="h-1 bg-white/10"><div className="h-full bg-gradient-to-r from-[#00B7FF] to-[#8B5CF6]" style={{ width: `${progress}%` }} /></div>}
@@ -263,7 +265,7 @@ const ContinueCard = ({ item, onSelect, onRemove }) => {
         onClick={() => onRemove(item)}
         aria-label={`Remove ${title} from Continue Watching`}
         title="Remove from Continue Watching"
-        className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-gray-300 hover:bg-red-600 hover:text-white transition-colors"
+        className="absolute flex items-center justify-center text-gray-300 transition-colors rounded-full top-3 right-3 h-9 w-9 bg-black/70 hover:bg-red-600 hover:text-white"
       >
         <FaTrash className="text-xs" />
       </button>

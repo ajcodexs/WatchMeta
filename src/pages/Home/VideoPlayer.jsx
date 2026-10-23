@@ -17,7 +17,7 @@ const getMessagePayload = (data) => {
     return data;
 };
 
-const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) => {
+const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster, onPlaybackStart }) => {
     const [started, setStarted] = useState(false);
     const [sourceIdx, setSourceIdx] = useState(0);
     const [realFullscreen, setRealFullscreen] = useState(false);
@@ -26,6 +26,10 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
     const containerRef = useRef(null);
     const iframeRef = useRef(null);
     const hideControlsTimerRef = useRef(null);
+    const sourceScrollRef = useRef(null);
+    const sourceDragRef = useRef({ active: false, pointerId: null, startX: 0, startScrollLeft: 0, moved: false });
+    const suppressSourceClickRef = useRef(false);
+    const [isDraggingSources, setIsDraggingSources] = useState(false);
 
     const source = SOURCES[sourceIdx];
     const iframeSrc = source.url(id, mediaType, season, episode);
@@ -55,6 +59,54 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
         document.body.style.overflow = pseudoFullscreen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [pseudoFullscreen]);
+
+    const handleSourcePointerDown = useCallback((event) => {
+        if (!event.isPrimary || event.button !== 0) return;
+        const el = sourceScrollRef.current;
+        if (!el) return;
+        sourceDragRef.current = {
+            active: true,
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startScrollLeft: el.scrollLeft,
+            moved: false,
+        };
+    }, []);
+
+    const handleSourcePointerMove = useCallback((event) => {
+        const el = sourceScrollRef.current;
+        const drag = sourceDragRef.current;
+        if (!el || !drag.active || drag.pointerId !== event.pointerId) return;
+        const delta = event.clientX - drag.startX;
+        if (Math.abs(delta) > 4 && !drag.moved) {
+            drag.moved = true;
+            el.setPointerCapture(event.pointerId);
+            setIsDraggingSources(true);
+        }
+        if (drag.moved) event.preventDefault();
+        el.scrollLeft = drag.startScrollLeft - delta;
+    }, []);
+
+    const handleSourcePointerUp = useCallback((event) => {
+        const drag = sourceDragRef.current;
+        if (!drag.active || drag.pointerId !== event.pointerId) return;
+        drag.active = false;
+        drag.pointerId = null;
+        suppressSourceClickRef.current = drag.moved;
+        setIsDraggingSources(false);
+        setTimeout(() => { suppressSourceClickRef.current = false; }, 0);
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('pointermove', handleSourcePointerMove);
+        window.addEventListener('pointerup', handleSourcePointerUp);
+        window.addEventListener('pointercancel', handleSourcePointerUp);
+        return () => {
+            window.removeEventListener('pointermove', handleSourcePointerMove);
+            window.removeEventListener('pointerup', handleSourcePointerUp);
+            window.removeEventListener('pointercancel', handleSourcePointerUp);
+        };
+    }, [handleSourcePointerMove, handleSourcePointerUp]);
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -122,11 +174,12 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
                 season: mediaType === 'tv' ? season : undefined,
                 episode: mediaType === 'tv' ? episode : undefined,
             });
+            if (currentTime > 0) onPlaybackStart?.();
         };
 
         window.addEventListener('message', handleMessage);
         return () => window.removeEventListener('message', handleMessage);
-    }, [episode, id, iframeOrigin, mediaType, season, showControls]);
+    }, [episode, id, iframeOrigin, mediaType, onPlaybackStart, season, showControls]);
 
     const toggleFullscreen = async () => {
         const element = containerRef.current;
@@ -166,23 +219,40 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
     };
 
     return (
-        <div className="w-full flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2 px-1">
-                <FaServer className="text-gray-400 text-sm mr-1" />
-                <span className="text-sm text-gray-400 font-medium mr-2">Source:</span>
-                {SOURCES.map((src, idx) => (
-                    <button
-                        key={idx}
-                        onClick={() => handleSourceChange(idx)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                            sourceIdx === idx
-                                ? 'bg-red-600 text-white shadow-md'
-                                : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                        }`}
+        <div className="flex flex-col w-full min-w-0 gap-3">
+            <div className="flex flex-col w-full min-w-0 gap-2 px-1">
+                <div className="flex items-center w-full min-w-0 gap-2">
+                    <div className="flex items-center gap-2 shrink-0">
+                        <FaServer className="text-sm text-gray-400" />
+                        <span className="mr-1 text-sm font-medium text-gray-400 whitespace-nowrap">Source:</span>
+                    </div>
+                    <div
+                        ref={sourceScrollRef}
+                        onPointerDown={handleSourcePointerDown}
+                        className={`flex items-center flex-1 w-0 min-w-0 gap-2 overflow-x-auto flex-nowrap hide-scrollbar select-none touch-pan-y ${isDraggingSources ? 'cursor-grabbing' : 'cursor-grab'}`}
                     >
-                        {src.name}
-                    </button>
-                ))}
+                        {SOURCES.map((src, idx) => (
+                            <button
+                                key={idx}
+                                onClick={(event) => {
+                                    if (suppressSourceClickRef.current) {
+                                        event.preventDefault();
+                                        return;
+                                    }
+                                    handleSourceChange(idx);
+                                }}
+                                className={`shrink-0 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                                    sourceIdx === idx
+                                        ? 'bg-red-600 text-white shadow-md'
+                                        : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                                }`}
+                            >
+                                {src.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <p className="text-xs text-gray-500">Video not playing or loading slowly? Try another server.</p>
             </div>
 
             <div
@@ -212,7 +282,7 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
                                 onClick={toggleFullscreen}
                                 aria-label={fullscreenActive ? 'Exit fullscreen' : 'Enter fullscreen'}
                                 title={fullscreenActive ? 'Exit fullscreen' : 'Enter fullscreen'}
-                                className="absolute left-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/10 text-white backdrop-blur-md transition-opacity hover:bg-white/20"
+                                className="absolute z-10 flex items-center justify-center w-10 h-10 text-white transition-opacity border rounded-lg left-3 top-3 border-white/10 bg-white/10 backdrop-blur-md hover:bg-white/20"
                             >
                                 {fullscreenActive ? <FaCompress /> : <FaExpand />}
                             </button>
@@ -221,13 +291,17 @@ const VideoPlayer = ({ id, mediaType, season = 1, episode = 1, title, poster }) 
                 ) : (
                     <button
                         type="button"
-                        onClick={() => { setStarted(true); showControls(); }}
+                        onClick={() => {
+                            onPlaybackStart?.();
+                            setStarted(true);
+                            showControls();
+                        }}
                         className="absolute inset-0 w-full h-full group"
                         aria-label={`Play ${title || 'video'}`}
                     >
-                        {poster && <img src={poster} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />}
+                        {poster && <img src={poster} alt="" className="absolute inset-0 object-cover w-full h-full opacity-60" />}
                         <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
-                        <span className="relative z-10 flex items-center justify-center w-16 h-16 mx-auto top-1/2 -translate-y-1/2 rounded-full bg-white text-black shadow-xl transition-transform group-hover:scale-110">
+                        <span className="absolute z-10 flex items-center justify-center w-16 h-16 text-black transition-transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full shadow-xl left-1/2 top-1/2 group-hover:scale-110">
                             <FaPlay className="ml-1" />
                         </span>
                     </button>
@@ -244,6 +318,7 @@ VideoPlayer.propTypes = {
     episode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
     poster: PropTypes.string,
+    onPlaybackStart: PropTypes.func,
 };
 
 export default memo(VideoPlayer);
